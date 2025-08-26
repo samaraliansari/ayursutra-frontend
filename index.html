@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chikitsa Verse - Your Health Partner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        // Tailwind CSS Dark Mode Configuration
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        /* --- Custom Animations --- */
+        .fade-in { animation: fadeIn 0.5s ease-in-out forwards; }
+        .fade-out { animation: fadeOut 0.5s ease-in-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-10px); display: none; } }
+        
+        /* --- Scrollbar Styling --- */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f8fafc; }
+        .dark ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .dark ::-webkit-scrollbar-thumb { background: #475569; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .dark ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+
+        /* --- Card Hover Effect --- */
+        .dashboard-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .dashboard-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
+        .dark .dashboard-card:hover { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1); }
+
+        /* Custom styles for popup content */
+        .info-item { display: flex; align-items: flex-start; gap: 1rem; }
+        .info-item i { flex-shrink: 0; margin-top: 4px; }
+        .pill { display: inline-block; padding: 4px 12px; border-radius: 9999px; font-size: 0.875rem; font-weight: 500; }
+
+        /* Smooth transitions for dark mode */
+        body, .bg-white, .bg-gray-100, .text-gray-800, .text-gray-600, .border-gray-300 {
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+        
+        /* Language Flipper Animation */
+        .flipper-container { perspective: 1000px; }
+        .flipper-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; }
+        .flipper-container.toggled .flipper-inner { transform: rotateY(180deg); }
+        .flipper-front, .flipper-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; font-weight: 600; border-radius: 9999px; }
+        .flipper-back { transform: rotateY(180deg); }
+
+        /* Floating Chatbot Styles */
+        .floating-chatbot-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background-color: #4f46e5; /* Vibrant Indigo */
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.4), 0 8px 10px -6px rgba(79, 70, 229, 0.2);
+            cursor: pointer;
+            z-index: 1001;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .floating-chatbot-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 30px -5px rgba(79, 70, 229, 0.5), 0 10px 15px -6px rgba(79, 70, 229, 0.3);
+        }
+        .chat-window {
+            position: fixed;
+            bottom: 6.5rem;
+            right: 2rem;
+            width: 90vw;
+            max-width: 400px;
+            height: 70vh;
+            max-height: 600px;
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 1000;
+            transform: translateY(20px) scale(0.95);
+            opacity: 0;
+            visibility: hidden;
+            transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .dark .chat-window {
+            background-color: #fff; /* gray-900 */
+        }
+        .chat-window.open {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-200">
+
+    <!-- =========== Main Container =========== -->
+    <div id="app-container" class="min-h-screen">
+
+        <!-- =========== Home Page =========== -->
+        <section id="home-page" class="flex items-center justify-center min-h-screen bg-gradient-to-br from-indigo-50 to-purple-100 dark:from-slate-900 dark:to-indigo-950 fade-in">
+            <div class="text-center p-8">
+                <div class="flex justify-center mb-6">
+                    <svg class="w-24 h-24 text-indigo-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10c0-4.42-2.87-8.17-6.84-9.5c-.5-.08-.84.28-.84.78v1.43c0 .42.26.8.65.98c2.03.93 3.45 3.03 3.45 5.4s-1.42 4.47-3.45 5.4c-.39.18-.65.56-.65.98v1.43c0 .5.34.86.84.78C19.13 20.17 22 16.42 22 12A10 10 0 0 0 12 2Z"/><path d="M4.26 10.22c-.08-.5.28-.84.78-.84h1.43c.42 0 .8.26.98.65c.93 2.03 3.03 3.45 5.4 3.45s4.47-1.42 5.4-3.45c.18-.39.56-.65.98-.65h1.43c.5 0 .86.34.78.84c-.47 2.8-2.93 5-5.78 5.42c-2.85.43-5.59-1.2-6.55-3.82c-.96-2.62-.42-5.61 1.18-7.58"/></svg>
+                </div>
+                <h1 class="text-5xl font-extrabold text-slate-900 dark:text-white" data-translate-key="welcome_title">Welcome to Chikitsa Verse</h1>
+                <p class="text-lg text-slate-600 dark:text-slate-300 mt-4 max-w-2xl mx-auto" data-translate-key="home_subtitle">Your comprehensive health partner, bridging the gap between traditional wisdom and modern technology.</p>
+                <button id="get-started-btn" class="mt-8 py-3 px-8 bg-indigo-600 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-opacity-75 transition-transform transform hover:scale-105" data-translate-key="home_get_started">
+                    Get Started
+                </button>
+            </div>
+        </section>
+
+        <!-- =========== Login Page =========== -->
+        <section id="login-page" class="hidden items-center justify-center min-h-screen bg-gradient-to-br from-indigo-50 to-purple-100 dark:from-slate-900 dark:to-indigo-950">
+            <div class="w-full max-w-md p-8 space-y-6 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800">
+                 <div class="text-center">
+                    <h1 class="text-3xl font-bold text-slate-900 dark:text-white" data-translate-key="login_title">Welcome Back!</h1>
+                    <p class="text-slate-600 dark:text-slate-400" data-translate-key="login_subtitle">Login with your demo credentials.</p>
+                </div>
+                <form id="login-form" class="space-y-4">
+                    <div>
+                        <label for="login-email" class="text-sm font-medium text-slate-700 dark:text-slate-300" data-translate-key="form_email">Email Address</label>
+                        <input id="login-email" name="email" type="email" autocomplete="email" required class="mt-1 block w-full px-3 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="patient@demo.com or doctor@demo.com">
+                    </div>
+                    <div>
+                        <label for="login-password" class="text-sm font-medium text-slate-700 dark:text-slate-300" data-translate-key="form_password">Password</label>
+                        <input id="login-password" name="password" type="password" autocomplete="current-password" required class="mt-1 block w-full px-3 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="any password">
+                    </div>
+                    <button type="submit" class="w-full py-3 px-4 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-opacity-75 transition-transform transform hover:scale-105" data-translate-key="login_button">
+                        Login
+                    </button>
+                </form>
+                <p id="login-error" class="text-sm text-red-500 text-center"></p>
+                <div class="text-center text-sm text-slate-600 dark:text-slate-400">
+                    <span data-translate-key="login_no_account">Don't have an account?</span>
+                    <button id="go-to-signup" class="font-medium text-indigo-600 hover:text-indigo-500" data-translate-key="signup_link">Sign up</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- =========== Sign Up Page =========== -->
+        <section id="signup-page" class="hidden items-center justify-center min-h-screen bg-gradient-to-br from-indigo-50 to-purple-100 dark:from-slate-900 dark:to-indigo-950">
+            <div class="w-full max-w-md p-8 space-y-6 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800">
+                 <div class="text-center">
+                    <h1 class="text-3xl font-bold text-slate-900 dark:text-white" data-translate-key="signup_title">Create an Account</h1>
+                    <p class="text-slate-600 dark:text-slate-400" data-translate-key="signup_subtitle">It's quick and easy.</p>
+                </div>
+                <form id="signup-form" class="space-y-4">
+                    <div>
+                        <label for="signup-name" class="text-sm font-medium text-slate-700 dark:text-slate-300" data-translate-key="form_name">Full Name</label>
+                        <input id="signup-name" type="text" required class="mt-1 block w-full px-3 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                    <div>
+                        <label for="signup-email" class="text-sm font-medium text-slate-700 dark:text-slate-300" data-translate-key="form_email">Email Address</label>
+                        <input id="signup-email" type="email" required class="mt-1 block w-full px-3 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                    <div>
+                        <label for="signup-password" class="text-sm font-medium text-slate-700 dark:text-slate-300" data-translate-key="form_password">Password</label>
+                        <input id="signup-password" type="password" required class="mt-1 block w-full px-3 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                    <button type="submit" class="w-full py-3 px-4 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-opacity-75 transition-transform transform hover:scale-105" data-translate-key="signup_button">
+                        Create Account
+                    </button>
+                </form>
+                 <p id="signup-success" class="text-sm text-green-500 text-center"></p>
+                <div class="text-center text-sm text-slate-600 dark:text-slate-400">
+                    <span data-translate-key="signup_has_account">Already have an account?</span>
+                    <button id="go-to-login" class="font-medium text-indigo-600 hover:text-indigo-500" data-translate-key="login_link">Log in</button>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- =========== Dashboard Container =========== -->
+        <main id="dashboard-container" class="hidden">
+            <!-- Navbar -->
+            <nav class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-sm sticky top-0 z-40 border-b border-slate-200 dark:border-slate-800">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex items-center justify-between h-16">
+                        <div class="flex items-center">
+                            <svg class="w-8 h-8 text-indigo-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10c0-4.42-2.87-8.17-6.84-9.5c-.5-.08-.84.28-.84.78v1.43c0 .42.26.8.65.98c2.03.93 3.45 3.03 3.45 5.4s-1.42 4.47-3.45 5.4c-.39.18-.65.56-.65.98v1.43c0 .5.34.86.84.78C19.13 20.17 22 16.42 22 12A10 10 0 0 0 12 2Z"/><path d="M4.26 10.22c-.08-.5.28-.84.78-.84h1.43c.42 0 .8.26.98.65c.93 2.03 3.03 3.45 5.4 3.45s4.47-1.42 5.4-3.45c.18-.39.56-.65.98-.65h1.43c.5 0 .86.34.78.84c-.47 2.8-2.93 5-5.78 5.42c-2.85.43-5.59-1.2-6.55-3.82c-.96-2.62-.42-5.61 1.18-7.58"/></svg>
+                            <span class="font-bold text-xl ml-2 text-slate-900 dark:text-white">Chikitsa Verse</span>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <div class="text-right">
+                                <div class="font-semibold text-slate-700 dark:text-slate-200" id="user-name-display"></div>
+                                <div class="text-sm text-slate-500 dark:text-slate-400" id="user-role-display"></div>
+                            </div>
+                            <button id="theme-toggle" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300">
+                                <i id="theme-icon-sun" data-lucide="sun" class="w-5 h-5"></i>
+                                <i id="theme-icon-moon" data-lucide="moon" class="w-5 h-5 hidden"></i>
+                            </button>
+                            <div id="language-flipper" class="flipper-container w-14 h-7 cursor-pointer">
+                                <div class="flipper-inner">
+                                    <div class="flipper-front bg-indigo-500 text-white">EN</div>
+                                    <div class="flipper-back bg-purple-500 text-white">HI</div>
+                                </div>
+                            </div>
+                            <button id="logout-btn" class="bg-rose-500 text-white px-3 py-1.5 rounded-md text-sm font-medium hover:bg-rose-600 transition-colors">
+                                <i data-lucide="log-out" class="w-4 h-4 inline-block mr-1"></i>
+                                <span data-translate-key="logout">Logout</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Patient Dashboard -->
+            <section id="patient-dashboard" class="p-4 sm:p-6 lg:p-8 hidden">
+                <h2 class="text-3xl font-bold mb-6" data-translate-key="patient_dashboard_title">Patient Dashboard</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <div class="dashboard-card bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md cursor-pointer border border-slate-200 dark:border-slate-700" data-modal-target="profile-info">
+                        <i data-lucide="user-circle-2" class="w-10 h-10 text-indigo-500 mb-4"></i>
+                        <h3 class="text-lg font-semibold" data-translate-key="pd_card_profile">Patient Profile & Health Info</h3>
+                    </div>
+                    <div class="dashboard-card bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md cursor-pointer border border-slate-200 dark:border-slate-700" data-modal-target="medications-info">
+                        <i data-lucide="pilcrow" class="w-10 h-10 text-emerald-500 mb-4"></i>
+                        <h3 class="text-lg font-semibold" data-translate-key="pd_card_medications">Medications & Treatments</h3>
+                    </div>
+                    <div class="dashboard-card bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md cursor-pointer border border-slate-200 dark:border-slate-700" data-modal-target="reminders-info">
+                        <i data-lucide="bell-ring" class="w-10 h-10 text-amber-500 mb-4"></i>
+                        <h3 class="text-lg font-semibold" data-translate-key="pd_card_reminders">Reminders & Alerts</h3>
+                    </div>
+                    <div class="dashboard-card bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md cursor-pointer border border-slate-200 dark:border-slate-700" data-modal-target="appointments-info">
+                        <i data-lucide="calendar-days" class="w-10 h-10 text-sky-500 mb-4"></i>
+                        <h3 class="text-lg font-semibold" data-translate-key="pd_card_appointments">Appointments & Scheduling</h3>
+                    </div>
+                    <div class="dashboard-card bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md cursor-pointer border border-slate-200 dark:border-slate-700" data-modal-target="progress-info">
+                        <i data-lucide="line-chart" class="w-10 h-10 text-lime-500 mb-4"></i>
+                        <h3 class="text-lg font-semibold" data-translate-key="pd_card_progress">Progress & Recovery</h3>
+                    </div>
+                    <div class="dashboard-card bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md cursor-pointer border border-slate-200 dark:border-slate-700" data-modal-target="lifestyle-info">
+                        <i data-lucide="heart-pulse" class="w-10 h-10 text-rose-500 mb-4"></i>
+                        <h3 class="text-lg font-semibold" data-translate-key="pd_card_lifestyle">Lifestyle Section</h3>
+                    </div>
+                    <div class="dashboard-card bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md cursor-pointer border border-slate-200 dark:border-slate-700" data-modal-target="utilities-info">
+                        <i data-lucide="app-window" class="w-10 h-10 text-slate-500 mb-4"></i>
+                        <h3 class="text-lg font-semibold" data-translate-key="pd_card_utilities">Extra Utilities</h3>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Doctor Dashboard -->
+            <section id="doctor-dashboard" class="p-4 sm:p-6 lg:p-8 hidden">
+                <h2 class="text-3xl font-bold mb-6" data-translate-key="doctor_dashboard_title">Doctor Dashboard</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="dashboard-card bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md cursor-pointer border border-slate-200 dark:border-slate-700" data-modal-target="doc-profile-info">
+                        <i data-lucide="user-md" class="w-10 h-10 text-indigo-500 mb-4"></i>
+                        <h3 class="text-lg font-semibold" data-translate-key="dd_card_profile">Doctor Profile</h3>
+                    </div>
+                    <div class="dashboard-card bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md cursor-pointer border border-slate-200 dark:border-slate-700" data-modal-target="patient-management-info">
+                        <i data-lucide="users" class="w-10 h-10 text-emerald-500 mb-4"></i>
+                        <h3 class="text-lg font-semibold" data-translate-key="dd_card_patients">Patient Management</h3>
+                    </div>
+                    <div class="dashboard-card bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md cursor-pointer border border-slate-200 dark:border-slate-700" data-modal-target="records-info">
+                        <i data-lucide="clipboard-list" class="w-10 h-10 text-amber-500 mb-4"></i>
+                        <h3 class="text-lg font-semibold" data-translate-key="dd_card_records">Health Records (EHR/EMR)</h3>
+                    </div>
+                    <div class="dashboard-card bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md cursor-pointer border border-slate-200 dark:border-slate-700" data-modal-target="doc-appointments-info">
+                        <i data-lucide="calendar-plus" class="w-10 h-10 text-sky-500 mb-4"></i>
+                        <h3 class="text-lg font-semibold" data-translate-key="dd_card_appointments">Appointments</h3>
+                    </div>
+                    <div class="dashboard-card bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md cursor-pointer border border-slate-200 dark:border-slate-700" data-modal-target="prescriptions-info">
+                        <i data-lucide="file-text" class="w-10 h-10 text-lime-500 mb-4"></i>
+                        <h3 class="text-lg font-semibold" data-translate-key="dd_card_prescriptions">Prescriptions</h3>
+                    </div>
+                    <div class="dashboard-card bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md cursor-pointer border border-slate-200 dark:border-slate-700" data-modal-target="analytics-info">
+                        <i data-lucide="bar-chart-3" class="w-10 h-10 text-rose-500 mb-4"></i>
+                        <h3 class="text-lg font-semibold" data-translate-key="dd_card_analytics">Analytics & Reporting</h3>
+                    </div>
+                    <div class="dashboard-card bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md cursor-pointer border border-slate-200 dark:border-slate-700" data-modal-target="guidance-info">
+                        <i data-lucide="heart-handshake" class="w-10 h-10 text-green-600 mb-4"></i>
+                        <h3 class="text-lg font-semibold" data-translate-key="dd_card_guidance">Lifestyle Guidance</h3>
+                    </div>
+                    <div class="dashboard-card bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md cursor-pointer border border-slate-200 dark:border-slate-700" data-modal-target="doc-notifications-info">
+                        <i data-lucide="bell" class="w-10 h-10 text-fuchsia-500 mb-4"></i>
+                        <h3 class="text-lg font-semibold" data-translate-key="dd_card_notifications">Notifications</h3>
+                    </div>
+                    <div class="dashboard-card bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md cursor-pointer border border-slate-200 dark:border-slate-700" data-modal-target="doc-utilities-info">
+                        <i data-lucide="settings-2" class="w-10 h-10 text-slate-500 mb-4"></i>
+                        <h3 class="text-lg font-semibold" data-translate-key="dd_card_utilities">Extra Utilities</h3>
+                    </div>
+                </div>
+            </section>
+
+             <section class="px-4 sm:px-6 lg:px-8 py-6">
+                <div class="max-w-2xl mx-auto bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-200 dark:border-slate-700">
+                    <h3 class="text-xl font-semibold mb-4" data-translate-key="message_box_title">Need help? Connect with a Doctor</h3>
+                    <form id="message-doctor-form">
+                        <textarea class="w-full p-3 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-lg focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition" rows="3" placeholder="Type your message here..."></textarea>
+                        <button type="submit" class="mt-4 w-full py-2.5 px-4 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-opacity-75" data-translate-key="message_box_button">
+                            Send Message
+                        </button>
+                    </form>
+                    <p id="message-status" class="mt-4 text-center text-green-600 dark:text-green-400 font-medium"></p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- =========== Modals and Popups =========== -->
+    <div id="mood-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4 hidden">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-8 w-full max-w-lg transform transition-all relative">
+            <button id="force-close-mood-modal-btn" class="absolute top-4 right-4 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <div id="mood-form-content">
+                <h2 class="text-2xl font-bold text-center mb-2" data-translate-key="mood_title">Daily Mood Check-in</h2>
+                <p class="text-center text-slate-600 dark:text-slate-400 mb-6" data-translate-key="mood_subtitle">Rate the following from 0 to 10.</p>
+                <div class="space-y-5">
+                    <div>
+                        <label for="q1" class="font-medium" data-translate-key="mood_q1">How happy do you feel today?</label>
+                        <div class="flex items-center space-x-4"><span>0</span><input type="range" id="q1" min="0" max="10" value="5" class="w-full h-2 bg-slate-200 dark:bg-slate-600 rounded-lg appearance-none cursor-pointer accent-indigo-500"><span>10</span></div>
+                    </div>
+                    <div>
+                        <label for="q2" class="font-medium" data-translate-key="mood_q2">How energetic are you feeling?</label>
+                        <div class="flex items-center space-x-4"><span>0</span><input type="range" id="q2" min="0" max="10" value="5" class="w-full h-2 bg-slate-200 dark:bg-slate-600 rounded-lg appearance-none cursor-pointer accent-emerald-500"><span>10</span></div>
+                    </div>
+                    <div>
+                        <label for="q3" class="font-medium" data-translate-key="mood_q3">How calm and relaxed are you?</label>
+                        <div class="flex items-center space-x-4"><span>0</span><input type="range" id="q3" min="0" max="10" value="5" class="w-full h-2 bg-slate-200 dark:bg-slate-600 rounded-lg appearance-none cursor-pointer accent-amber-500"><span>10</span></div>
+                    </div>
+                    <div>
+                        <label for="q4" class="font-medium" data-translate-key="mood_q4">How well did you sleep last night?</label>
+                        <div class="flex items-center space-x-4"><span>0</span><input type="range" id="q4" min="0" max="10" value="5" class="w-full h-2 bg-slate-200 dark:bg-slate-600 rounded-lg appearance-none cursor-pointer accent-sky-500"><span>10</span></div>
+                    </div>
+                </div>
+                <button id="submit-mood-btn" class="mt-8 w-full py-3 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700 transition-colors" data-translate-key="mood_submit">Submit</button>
+            </div>
+            <div id="mood-result-content" class="hidden text-center">
+                <h3 class="text-2xl font-bold mb-4" data-translate-key="mood_result_title">Your Mood Analysis</h3>
+                <div class="bg-indigo-50 dark:bg-slate-700 p-4 rounded-lg">
+                    <p class="text-lg text-slate-700 dark:text-slate-200">Your average score is: <span id="mood-average-score" class="font-bold text-indigo-600 dark:text-indigo-400 text-xl"></span></p>
+                    <p class="text-xl mt-2">This indicates an <strong id="mood-classification" class="text-indigo-700 dark:text-indigo-300"></strong> mood.</p>
+                </div>
+                <button id="close-mood-modal-btn" class="mt-6 w-full py-3 bg-emerald-500 text-white font-bold rounded-lg hover:bg-emerald-600 transition-colors" data-translate-key="mood_close">Continue to Dashboard</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="info-popup" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4 hidden">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-8 w-full max-w-3xl transform transition-all relative max-h-[90vh] overflow-y-auto border border-slate-200 dark:border-slate-700">
+            <button id="close-popup-btn" class="absolute top-4 right-4 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <h2 id="popup-title" class="text-2xl font-bold mb-4">Popup Title</h2>
+            <div id="popup-content" class="text-slate-700 dark:text-slate-300 space-y-4"></div>
+        </div>
+    </div>
+
+    <!-- Floating AI Chatbot -->
+    <div id="floating-chatbot-btn" class="floating-chatbot-btn">
+        <i data-lucide="bot" class="w-8 h-8"></i>
+    </div>
+    <div id="chat-window" class="chat-window">
+        <iframe src="https://app.relevanceai.com/agents/f1db6c/6d4fa78e-4492-45c4-aaf1-a80bec2a75e5/9719069e-c179-49c5-8d9f-ae815f1755ee/embed-chat?hide_tool_steps=false&hide_file_uploads=false&hide_conversation_list=false&bubble_style=agent&primary_color=%23685FFF&bubble_icon=pd%2Fchat&input_placeholder_text=Type+your+message...&hide_logo=false&hide_description=false" class="w-full h-full border-0 rounded-b-lg"></iframe>
+    </div>
+
+
+    <script>
+        // --- Translations Object ---
+        const translations = {
+            en: {
+                welcome_title: "Welcome to Chikitsa Verse",
+                home_subtitle: "Your comprehensive health partner, bridging the gap between traditional wisdom and modern technology.",
+                home_get_started: "Get Started",
+                login_title: "Welcome Back!",
+                login_subtitle: "Login with your demo credentials.",
+                login_button: "Login",
+                login_no_account: "Don't have an account?",
+                signup_link: "Sign up",
+                signup_title: "Create an Account",
+                signup_subtitle: "It's quick and easy.",
+                signup_button: "Create Account",
+                signup_has_account: "Already have an account?",
+                login_link: "Log in",
+                form_email: "Email Address",
+                form_password: "Password",
+                form_name: "Full Name",
+                logout: "Logout",
+                patient_dashboard_title: "Patient Dashboard",
+                pd_card_profile: "Patient Profile & Health Info",
+                pd_card_medications: "Medications & Treatments",
+                pd_card_reminders: "Reminders & Alerts",
+                pd_card_appointments: "Appointments & Scheduling",
+                pd_card_progress: "Progress & Recovery",
+                pd_card_lifestyle: "Lifestyle Section",
+                pd_card_ayurveda: "Ayurvedic Medicines Info",
+                pd_card_utilities: "Extra Utilities",
+                doctor_dashboard_title: "Doctor Dashboard",
+                dd_card_profile: "Doctor Profile",
+                dd_card_patients: "Patient Management",
+                dd_card_records: "Health Records (EHR/EMR)",
+                dd_card_appointments: "Appointments",
+                dd_card_prescriptions: "Prescriptions",
+                dd_card_analytics: "Analytics & Reporting",
+                dd_card_guidance: "Lifestyle Guidance",
+                dd_card_notifications: "Notifications",
+                dd_card_utilities: "Extra Utilities",
+                message_box_title: "Need help? Connect with a Doctor",
+                message_box_button: "Send Message",
+                mood_title: "Daily Mood Check-in",
+                mood_subtitle: "Rate the following from 0 to 10.",
+                mood_q1: "How happy do you feel today?",
+                mood_q2: "How energetic are you feeling?",
+                mood_q3: "How calm and relaxed are you?",
+                mood_q4: "How well did you sleep last night?",
+                mood_submit: "Submit",
+                mood_result_title: "Your Mood Analysis",
+                mood_close: "Continue to Dashboard",
+            },
+            hi: {
+                welcome_title: "चिकित्सा वर्स में आपका स्वागत है",
+                home_subtitle: "आपका व्यापक स्वास्थ्य भागीदार, पारंपरिक ज्ञान और आधुनिक तकनीक के बीच की खाई को पाटना।",
+                home_get_started: "शुरू हो जाओ",
+                login_title: "वापसी पर स्वागत है!",
+                login_subtitle: "अपने डेमो क्रेडेंशियल्स के साथ लॉगिन करें।",
+                login_button: "लॉग इन करें",
+                login_no_account: "खाता नहीं है?",
+                signup_link: "साइन अप करें",
+                signup_title: "खाता बनाएं",
+                signup_subtitle: "यह तेज़ और आसान है।",
+                signup_button: "खाता बनाएं",
+                signup_has_account: "पहले से ही एक खाता है?",
+                login_link: "लॉग इन करें",
+                form_email: "ईमेल पता",
+                form_password: "पासवर्ड",
+                form_name: "पूरा नाम",
+                logout: "लॉग आउट",
+                patient_dashboard_title: "रोगी डैशबोर्ड",
+                pd_card_profile: "रोगी प्रोफाइल और स्वास्थ्य जानकारी",
+                pd_card_medications: "दवाएं और उपचार",
+                pd_card_reminders: "अनुस्मारक और अलर्ट",
+                pd_card_appointments: "अपॉइंटमेंट्स और शेड्यूलिंग",
+                pd_card_progress: "प्रगति और रिकवरी",
+                pd_card_lifestyle: "जीवनशैली अनुभाग",
+                pd_card_ayurveda: "आयुर्वेदिक दवाओं की जानकारी",
+                pd_card_utilities: "अतिरिक्त उपयोगिताएँ",
+                doctor_dashboard_title: "डॉक्टर डैशबोर्ड",
+                dd_card_profile: "डॉक्टर प्रोफाइल",
+                dd_card_patients: "रोगी प्रबंधन",
+                dd_card_records: "स्वास्थ्य रिकॉर्ड (ईएचआर/ईएमआर)",
+                dd_card_appointments: "अपॉइंटमेंट्स",
+                dd_card_prescriptions: "नुस्खे",
+                dd_card_analytics: "विश्लेषिकी और रिपोर्टिंग",
+                dd_card_guidance: "जीवनशैली मार्गदर्शन",
+                dd_card_notifications: "सूचनाएं",
+                dd_card_utilities: "अतिरिक्त उपयोगिताएँ",
+                message_box_title: "मदद चाहिए? डॉक्टर से जुड़ें",
+                message_box_button: "संदेश भेजें",
+                mood_title: "दैनिक मूड चेक-इन",
+                mood_subtitle: "निम्नलिखित को 0 से 10 तक रेट करें।",
+                mood_q1: "आज आप कितना खुश महसूस कर रहे हैं?",
+                mood_q2: "आप कितना ऊर्जावान महसूस कर रहे हैं?",
+                mood_q3: "आप कितने शांत और तनावमुक्त हैं?",
+                mood_q4: "कल रात आपको कितनी अच्छी नींद आई?",
+                mood_submit: "प्रस्तुत करें",
+                mood_result_title: "आपका मूड विश्लेषण",
+                mood_close: "डैशबोर्ड पर जारी रखें",
+            }
+        };
+
+        // --- Demo Data ---
+        const demoPatientData = {
+            role: 'Patient',
+            profile: { name: 'Priya Sharma', age: 34, gender: 'Female', contact: '+91 98765 43210', address: '123, MG Road, Bangalore, 560001', emergencyContact: 'Amit Sharma (Husband), +91 98765 43211' },
+            healthInfo: { bloodType: 'O+', allergies: ['Pollen', 'Dust Mites'], conditions: ['Mild Hypertension'], surgeries: ['Appendectomy (2015)'] },
+            medications: [
+                { name: 'Amlodipine', dosage: '5mg', frequency: 'Once a day' },
+                { name: 'Multivitamin', dosage: '1 tablet', frequency: 'Once a day' },
+                { name: 'Paracetamol', dosage: '500mg', frequency: 'As needed for pain' }
+            ],
+            appointments: [
+                { doctor: 'Dr. Ramesh Gupta', specialty: 'Cardiologist', date: '2025-09-10', time: '11:00 AM', status: 'Upcoming' },
+                { doctor: 'Dr. Anjali Desai', specialty: 'Dermatologist', date: '2025-08-15', time: '02:30 PM', status: 'Completed' }
+            ],
+            reminders: ['Take Amlodipine at 9:00 AM', 'Annual health check-up due in October', 'Follow up with Dr. Gupta on Sep 10th'],
+            progress: { bp: '130/85 mmHg (Last checked: 2025-08-20)', sugar: '95 mg/dL (Fasting, Last checked: 2025-08-20)' }
+        };
+
+        const demoDoctorData = {
+            role: 'Doctor',
+            profile: { name: 'Dr. Ramesh Gupta', specialization: 'Cardiology', qualifications: 'MD, DM (Cardiology)', contact: '+91 87654 32109', clinic: 'City Heart Clinic, Bangalore' },
+            appointments: [
+                { patient: 'Priya Sharma', date: '2025-09-10', time: '11:00 AM', reason: 'Hypertension Follow-up' },
+                { patient: 'Rohan Verma', date: '2025-09-10', time: '11:30 AM', reason: 'Post-Angioplasty Check' },
+                { patient: 'Sunita Patil', date: '2025-09-11', time: '10:00 AM', reason: 'New Patient Consultation' }
+            ],
+            patients: [
+                { name: 'Priya Sharma', lastVisit: '2025-08-10', condition: 'Mild Hypertension' },
+                { name: 'Rohan Verma', lastVisit: '2025-08-01', condition: 'Coronary Artery Disease' },
+                { name: 'Anil Kumar', lastVisit: '2025-07-22', condition: 'Arrhythmia' }
+            ]
+        };
+
+        // --- Global State ---
+        let userMood = 'Good';
+        let currentUser = null;
+        let currentLanguage = 'en';
+
+        // --- DOM Elements ---
+        const homePage = document.getElementById('home-page'),
+              getStartedBtn = document.getElementById('get-started-btn'),
+              loginPage = document.getElementById('login-page'), 
+              signupPage = document.getElementById('signup-page'),
+              loginForm = document.getElementById('login-form'),
+              signupForm = document.getElementById('signup-form'),
+              goToSignupBtn = document.getElementById('go-to-signup'),
+              goToLoginBtn = document.getElementById('go-to-login'),
+              loginError = document.getElementById('login-error'),
+              signupSuccess = document.getElementById('signup-success'),
+              dashboardContainer = document.getElementById('dashboard-container'),
+              patientDashboard = document.getElementById('patient-dashboard'), 
+              doctorDashboard = document.getElementById('doctor-dashboard'),
+              logoutBtn = document.getElementById('logout-btn'), 
+              languageFlipper = document.getElementById('language-flipper'),
+              moodModal = document.getElementById('mood-modal'), 
+              submitMoodBtn = document.getElementById('submit-mood-btn'),
+              infoPopup = document.getElementById('info-popup'), 
+              popupTitle = document.getElementById('popup-title'),
+              popupContent = document.getElementById('popup-content'), 
+              closePopupBtn = document.getElementById('close-popup-btn'),
+              messageForm = document.getElementById('message-doctor-form'), 
+              messageStatus = document.getElementById('message-status'),
+              moodFormContent = document.getElementById('mood-form-content'), 
+              moodResultContent = document.getElementById('mood-result-content'),
+              moodAverageScore = document.getElementById('mood-average-score'), 
+              moodClassification = document.getElementById('mood-classification'),
+              closeMoodModalBtn = document.getElementById('close-mood-modal-btn'),
+              forceCloseMoodModalBtn = document.getElementById('force-close-mood-modal-btn'),
+              userNameDisplay = document.getElementById('user-name-display'), 
+              userRoleDisplay = document.getElementById('user-role-display'),
+              themeToggle = document.getElementById('theme-toggle'), 
+              themeIconSun = document.getElementById('theme-icon-sun'),
+              themeIconMoon = document.getElementById('theme-icon-moon'),
+              floatingChatbotBtn = document.getElementById('floating-chatbot-btn'),
+              chatWindow = document.getElementById('chat-window');
+
+        // --- Functions ---
+        const setLanguage = (lang) => {
+            currentLanguage = lang;
+            document.querySelectorAll('[data-translate-key]').forEach(element => {
+                const key = element.getAttribute('data-translate-key');
+                if (translations[lang] && translations[lang][key]) {
+                    element.innerText = translations[lang][key];
+                }
+            });
+            document.documentElement.lang = lang;
+        };
+
+        const showPage = (pageToShow) => {
+            document.querySelectorAll('#app-container > section').forEach(s => s.style.display = 'none');
+            pageToShow.style.display = 'flex';
+            pageToShow.classList.remove('fade-out');
+            pageToShow.classList.add('fade-in');
+        };
+
+        const showDashboard = (dashboardToShow, user) => {
+            currentUser = user;
+            userNameDisplay.textContent = user.profile.name;
+            userRoleDisplay.textContent = user.role;
+            
+            // Hide all main sections
+            document.querySelectorAll('#app-container > section').forEach(s => s.style.display = 'none');
+            
+            dashboardContainer.style.display = 'block';
+            dashboardContainer.classList.add('fade-in');
+            patientDashboard.style.display = 'none';
+            doctorDashboard.style.display = 'none';
+            dashboardToShow.style.display = 'block';
+        };
+
+        const handleLogout = () => {
+            currentUser = null;
+            dashboardContainer.classList.remove('fade-in');
+            dashboardContainer.classList.add('fade-out');
+            setTimeout(() => {
+                location.reload();
+            }, 500);
+        };
+        
+        const showPopup = (titleKey, contentHTML) => {
+            popupTitle.innerText = titleKey;
+            popupContent.innerHTML = contentHTML;
+            infoPopup.classList.remove('hidden');
+            infoPopup.classList.add('fade-in');
+            lucide.createIcons(); // Re-render icons inside the popup
+        };
+
+        const getPopupContent = (targetId, user) => {
+            let content = '', titleKey = '';
+            const createInfoItem = (icon, label, value) => `
+                <div class="info-item py-2">
+                    <i data-lucide="${icon}" class="w-6 h-6 text-indigo-500"></i>
+                    <div>
+                        <p class="font-semibold text-slate-800 dark:text-slate-100">${label}</p>
+                        <p class="text-slate-600 dark:text-slate-400">${value}</p>
+                    </div>
+                </div>`;
+            
+            switch (targetId) {
+                // Patient Cases
+                case 'profile-info':
+                    titleKey = translations[currentLanguage]['pd_card_profile'];
+                    content = `
+                        <h4 class="font-semibold text-lg mb-2 border-b pb-2 border-slate-200 dark:border-slate-700">Personal Details</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6">
+                            ${createInfoItem('user', 'Name', user.profile.name)}
+                            ${createInfoItem('cake', 'Age', user.profile.age)}
+                            ${createInfoItem(user.profile.gender === 'Female' ? 'female' : 'male', 'Gender', user.profile.gender)}
+                            ${createInfoItem('phone', 'Contact', user.profile.contact)}
+                            ${createInfoItem('home', 'Address', user.profile.address)}
+                            ${createInfoItem('shield-alert', 'Emergency Contact', user.profile.emergencyContact)}
+                        </div>
+                        <hr class="my-4 dark:border-slate-700">
+                        <h4 class="font-semibold text-lg mb-2 border-b pb-2 border-slate-200 dark:border-slate-700">Medical Information</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6">
+                            ${createInfoItem('droplets', 'Blood Type', user.healthInfo.bloodType)}
+                            ${createInfoItem('bug', 'Allergies', user.healthInfo.allergies.join(', '))}
+                            ${createInfoItem('activity', 'Chronic Conditions', user.healthInfo.conditions.join(', '))}
+                            ${createInfoItem('scissors', 'Past Surgeries', user.healthInfo.surgeries.join(', '))}
+                        </div>`;
+                    break;
+                case 'medications-info':
+                    titleKey = translations[currentLanguage]['pd_card_medications'];
+                    content = user.medications.map(med => `
+                        <div class="info-item p-3 bg-slate-100 dark:bg-slate-700 rounded-lg">
+                            <i data-lucide="pill" class="w-6 h-6 text-emerald-500"></i>
+                            <div>
+                                <p class="font-bold text-md">${med.name}</p>
+                                <p><strong>Dosage:</strong> ${med.dosage} | <strong>Frequency:</strong> ${med.frequency}</p>
+                            </div>
+                        </div>`).join('');
+                    break;
+                case 'appointments-info':
+                    titleKey = translations[currentLanguage]['pd_card_appointments'];
+                    content = user.appointments.map(appt => `
+                        <div class="p-3 bg-slate-100 dark:bg-slate-700 rounded-lg mb-3">
+                            <div class="flex justify-between items-center mb-2">
+                                <div class="flex items-center gap-3">
+                                    <i data-lucide="user-md" class="w-6 h-6 text-sky-500"></i>
+                                    <p class="font-bold text-md">${appt.doctor} (${appt.specialty})</p>
+                                </div>
+                                <span class="pill ${appt.status === 'Upcoming' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' : 'bg-slate-200 text-slate-800 dark:bg-slate-600 dark:text-slate-200'}">${appt.status}</span>
+                            </div>
+                            <div class="flex items-center gap-3 text-sm">
+                                <i data-lucide="calendar" class="w-4 h-4"></i><span>${appt.date}</span>
+                                <i data-lucide="clock" class="w-4 h-4"></i><span>${appt.time}</span>
+                            </div>
+                        </div>`).join('') + `<button class="mt-4 w-full bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">Book New Appointment</button>`;
+                    break;
+                // Doctor Cases
+                case 'doc-profile-info':
+                    titleKey = translations[currentLanguage]['dd_card_profile'];
+                    content = `
+                        ${createInfoItem('user-md', 'Name', user.profile.name)}
+                        ${createInfoItem('stethoscope', 'Specialization', user.profile.specialization)}
+                        ${createInfoItem('graduation-cap', 'Qualifications', user.profile.qualifications)}
+                        ${createInfoItem('phone-call', 'Contact', user.profile.contact)}
+                        ${createInfoItem('hospital', 'Clinic', user.profile.clinic)}
+                    `;
+                    break;
+                case 'patient-management-info':
+                    titleKey = translations[currentLanguage]['dd_card_patients'];
+                    content = user.patients.map(p => `
+                        <div class="p-3 bg-slate-100 dark:bg-slate-700 rounded-lg mb-2 flex justify-between items-center">
+                            <div class="info-item">
+                                <i data-lucide="user" class="w-6 h-6 text-emerald-500"></i>
+                                <div>
+                                    <p class="font-bold">${p.name}</p>
+                                    <p class="text-sm">Condition: ${p.condition}</p>
+                                </div>
+                            </div>
+                            <button class="text-sm bg-white dark:bg-slate-600 border border-slate-300 dark:border-slate-500 px-3 py-1 rounded-md hover:bg-slate-50 dark:hover:bg-slate-500">View Record</button>
+                        </div>`).join('');
+                    break;
+                default:
+                    titleKey = 'Information';
+                    content = '<p>More information coming soon.</p>';
+            }
+            return { titleKey, content };
+        };
+
+        // --- Event Listeners ---
+        window.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            // Dark Mode Initialization
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                document.documentElement.classList.add('dark');
+                themeIconMoon.classList.remove('hidden');
+                themeIconSun.classList.add('hidden');
+            } else {
+                document.documentElement.classList.remove('dark');
+                themeIconSun.classList.remove('hidden');
+                themeIconMoon.classList.add('hidden');
+            }
+            setLanguage(currentLanguage);
+        });
+        
+        getStartedBtn.addEventListener('click', () => {
+             homePage.classList.add('fade-out');
+             setTimeout(() => showPage(loginPage), 500);
+        });
+
+        goToSignupBtn.addEventListener('click', () => {
+            loginPage.classList.add('fade-out');
+            setTimeout(() => showPage(signupPage), 500);
+        });
+
+        goToLoginBtn.addEventListener('click', () => {
+            signupPage.classList.add('fade-out');
+            setTimeout(() => showPage(loginPage), 500);
+        });
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            loginError.textContent = '';
+            const email = e.target.email.value.trim();
+            if (email === 'patient@demo.com') {
+                showDashboard(patientDashboard, demoPatientData);
+                moodModal.classList.remove('hidden');
+            } else if (email === 'doctor@demo.com') {
+                showDashboard(doctorDashboard, demoDoctorData);
+            } else {
+                loginError.textContent = 'Invalid demo email. Please use patient@demo.com or doctor@demo.com.';
+            }
+        });
+
+        signupForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            signupSuccess.textContent = 'Account created successfully! Please log in.';
+            setTimeout(() => {
+                signupSuccess.textContent = '';
+                signupPage.classList.add('fade-out');
+                setTimeout(() => showPage(loginPage), 500);
+            }, 2000);
+        });
+
+        logoutBtn.addEventListener('click', handleLogout);
+
+        languageFlipper.addEventListener('click', () => {
+            const isToggled = languageFlipper.classList.toggle('toggled');
+            setLanguage(isToggled ? 'hi' : 'en');
+        });
+
+        themeToggle.addEventListener('click', () => {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            themeIconSun.classList.toggle('hidden', isDark);
+            themeIconMoon.classList.toggle('hidden', !isDark);
+        });
+
+        submitMoodBtn.addEventListener('click', () => {
+            const q1 = parseInt(document.getElementById('q1').value), q2 = parseInt(document.getElementById('q2').value),
+                  q3 = parseInt(document.getElementById('q3').value), q4 = parseInt(document.getElementById('q4').value);
+            const avg = (q1 + q2 + q3 + q4) / 4;
+            let moodText = '';
+            if (avg < 5) { userMood = 'Bad'; moodText = 'Bad'; }
+            else if (avg <= 7) { userMood = 'Good'; moodText = 'Good'; }
+            else { userMood = 'Excellent'; moodText = 'Excellent'; }
+            moodAverageScore.textContent = avg.toFixed(1);
+            moodClassification.textContent = moodText;
+            moodFormContent.classList.add('hidden');
+            moodResultContent.classList.remove('hidden');
+        });
+
+        closeMoodModalBtn.addEventListener('click', () => moodModal.classList.add('hidden'));
+        forceCloseMoodModalBtn.addEventListener('click', () => moodModal.classList.add('hidden'));
+
+        document.querySelectorAll('.dashboard-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const targetId = card.getAttribute('data-modal-target');
+                if (!targetId) return;
+                const { titleKey, content } = getPopupContent(targetId, currentUser);
+                showPopup(titleKey, content);
+            });
+        });
+        
+        closePopupBtn.addEventListener('click', () => {
+            infoPopup.classList.add('hidden');
+            infoPopup.classList.remove('fade-in');
+        });
+
+        floatingChatbotBtn.addEventListener('click', () => {
+            chatWindow.classList.toggle('open');
+        });
+
+        messageForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            messageStatus.innerText = "Connecting you to a doctor...";
+            setTimeout(() => { messageStatus.innerText = "A doctor will be in touch shortly."; }, 2000);
+            setTimeout(() => { messageStatus.innerText = ""; messageForm.reset(); }, 5000);
+        });
+    </script>
+    <script src="src/script.js"></script>
+</body>
+</html>
