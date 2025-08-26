@@ -348,7 +348,16 @@
                 <h3 class="text-2xl font-bold mb-4" data-translate-key="mood_result_title">Your Mood Analysis</h3>
                 <div class="bg-indigo-50 dark:bg-slate-700 p-4 rounded-lg">
                     <p class="text-lg text-slate-700 dark:text-slate-200">Your average score is: <span id="mood-average-score" class="font-bold text-indigo-600 dark:text-indigo-400 text-xl"></span></p>
-                    <p class="text-xl mt-2">This indicates an <strong id="mood-classification" class="text-indigo-700 dark:text-indigo-300"></strong> mood.</p>
+                    <p class="text-xl mt-2">This indicates a <strong id="mood-classification" class="text-indigo-700 dark:text-indigo-300"></strong> mood.</p>
+                </div>
+                <div id="mood-suggestions" class="hidden mt-4 text-left">
+                    <h4 class="font-semibold mb-2" data-translate-key="mood_suggestion_title">Here are a few things that might help:</h4>
+                    <ul class="list-disc list-inside space-y-1 text-slate-600 dark:text-slate-400">
+                        <li data-translate-key="mood_suggestion_1">Listen to some calming music.</li>
+                        <li data-translate-key="mood_suggestion_2">Try a short 5-minute meditation.</li>
+                        <li data-translate-key="mood_suggestion_3">Step outside for some fresh air.</li>
+                        <li data-translate-key="mood_suggestion_4">Reach out to a friend or loved one.</li>
+                    </ul>
                 </div>
                 <button id="close-mood-modal-btn" class="mt-6 w-full py-3 bg-emerald-500 text-white font-bold rounded-lg hover:bg-emerald-600 transition-colors" data-translate-key="mood_close">Continue to Dashboard</button>
             </div>
@@ -425,6 +434,11 @@
                 mood_submit: "Submit",
                 mood_result_title: "Your Mood Analysis",
                 mood_close: "Continue to Dashboard",
+                mood_suggestion_title: "Here are a few things that might help:",
+                mood_suggestion_1: "Listen to some calming music.",
+                mood_suggestion_2: "Try a short 5-minute meditation.",
+                mood_suggestion_3: "Step outside for some fresh air.",
+                mood_suggestion_4: "Reach out to a friend or loved one.",
             },
             hi: {
                 welcome_title: "चिकित्सा वर्स में आपका स्वागत है",
@@ -474,6 +488,11 @@
                 mood_submit: "प्रस्तुत करें",
                 mood_result_title: "आपका मूड विश्लेषण",
                 mood_close: "डैशबोर्ड पर जारी रखें",
+                mood_suggestion_title: "यहाँ कुछ चीज़ें हैं जो मदद कर सकती हैं:",
+                mood_suggestion_1: "कुछ शांत संगीत सुनें।",
+                mood_suggestion_2: "5 मिनट का छोटा ध्यान करने का प्रयास करें।",
+                mood_suggestion_3: "ताज़ी हवा के लिए बाहर कदम रखें।",
+                mood_suggestion_4: "किसी मित्र या प्रियजन से संपर्क करें।",
             }
         };
 
@@ -543,6 +562,7 @@
               moodResultContent = document.getElementById('mood-result-content'),
               moodAverageScore = document.getElementById('mood-average-score'), 
               moodClassification = document.getElementById('mood-classification'),
+              moodSuggestions = document.getElementById('mood-suggestions'),
               closeMoodModalBtn = document.getElementById('close-mood-modal-btn'),
               forceCloseMoodModalBtn = document.getElementById('force-close-mood-modal-btn'),
               userNameDisplay = document.getElementById('user-name-display'), 
@@ -774,9 +794,22 @@
                   q3 = parseInt(document.getElementById('q3').value), q4 = parseInt(document.getElementById('q4').value);
             const avg = (q1 + q2 + q3 + q4) / 4;
             let moodText = '';
-            if (avg < 5) { userMood = 'Bad'; moodText = 'Bad'; }
-            else if (avg <= 7) { userMood = 'Good'; moodText = 'Good'; }
-            else { userMood = 'Excellent'; moodText = 'Excellent'; }
+            
+            moodSuggestions.classList.add('hidden'); // Reset suggestions
+
+            if (avg < 5) { 
+                userMood = 'Not Good'; 
+                moodText = 'Not Good';
+                moodSuggestions.classList.remove('hidden');
+            }
+            else if (avg <= 7) { 
+                userMood = 'Good'; 
+                moodText = 'Good'; 
+            }
+            else { 
+                userMood = 'Excellent'; 
+                moodText = 'Excellent'; 
+            }
             moodAverageScore.textContent = avg.toFixed(1);
             moodClassification.textContent = moodText;
             moodFormContent.classList.add('hidden');
@@ -811,6 +844,5 @@
             setTimeout(() => { messageStatus.innerText = ""; messageForm.reset(); }, 5000);
         });
     </script>
-    <script src="src/script.js"></script>
 </body>
 </html>
