@@ -279,121 +279,7 @@
                     </div>
             </section>
 
-
-            <!-- Doctor Dashboard -->
-            <section id="doctor-dashboard" class="p-4 sm:p-6 lg:p-8 hidden">
-                <h2 class="center text-3xl font-bold mb-6" data-translate-key="doctor_dashboard_title">Doctor Dashboard</h2>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div class="dashboard-card bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md cursor-pointer border border-slate-200 dark:border-slate-700" data-modal-target="doc-profile-info">
-                        <i data-lucide="user-md" class="w-10 h-10 text-indigo-500 mb-4"></i>
-                        <h3 class="text-lg font-semibold" data-translate-key="dd_card_profile">Doctor Profile</h3>
-                    </div>
-                    <div class="dashboard-card bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md cursor-pointer border border-slate-200 dark:border-slate-700" data-modal-target="patient-management-info">
-                        <i data-lucide="users" class="w-10 h-10 text-emerald-500 mb-4"></i>
-                        <h3 class="text-lg font-semibold" data-translate-key="dd_card_patients">Patient Management</h3>
-                    </div>
-                    <div class="dashboard-card bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md cursor-pointer border border-slate-200 dark:border-slate-700" data-modal-target="records-info">
-                        <i data-lucide="clipboard-list" class="w-10 h-10 text-amber-500 mb-4"></i>
-                        <h3 class="text-lg font-semibold" data-translate-key="dd_card_records">Health Records (EHR/EMR)</h3>
-                    </div>
-                    <div class="dashboard-card bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md cursor-pointer border border-slate-200 dark:border-slate-700" data-modal-target="doc-appointments-info">
-                        <i data-lucide="calendar-plus" class="w-10 h-10 text-sky-500 mb-4"></i>
-                        <h3 class="text-lg font-semibold" data-translate-key="dd_card_appointments">Appointments</h3>
-                    </div>
-                    <div class="dashboard-card bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md cursor-pointer border border-slate-200 dark:border-slate-700" data-modal-target="prescriptions-info">
-                        <i data-lucide="file-text" class="w-10 h-10 text-lime-500 mb-4"></i>
-                        <h3 class="text-lg font-semibold" data-translate-key="dd_card_prescriptions">Prescriptions</h3>
-                    </div>
-                    <div class="dashboard-card bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md cursor-pointer border border-slate-200 dark:border-slate-700" data-modal-target="analytics-info">
-                        <i data-lucide="bar-chart-3" class="w-10 h-10 text-rose-500 mb-4"></i>
-                        <h3 class="text-lg font-semibold" data-translate-key="dd_card_analytics">Analytics & Reporting</h3>
-                    </div>
-                    <div class="dashboard-card bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md cursor-pointer border border-slate-200 dark:border-slate-700" data-modal-target="guidance-info">
-                        <i data-lucide="heart-handshake" class="w-10 h-10 text-green-600 mb-4"></i>
-                        <h3 class="text-lg font-semibold" data-translate-key="dd_card_guidance">Yoga Practices</h3>
-                    </div>
-                    <div class="dashboard-card bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md cursor-pointer border border-slate-200 dark:border-slate-700" data-modal-target="doc-notifications-info">
-                        <i data-lucide="bell" class="w-10 h-10 text-fuchsia-500 mb-4"></i>
-                        <h3 class="text-lg font-semibold" data-translate-key="dd_card_notifications">Notifications</h3>
-                    </div>
-                    <div class="dashboard-card bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md cursor-pointer border border-slate-200 dark:border-slate-700" data-modal-target="doc-utilities-info">
-                        <i data-lucide="settings-2" class="w-10 h-10 text-slate-500 mb-4"></i>
-                        <h3 class="text-lg font-semibold" data-translate-key="dd_card_utilities">Extra Utilities</h3>
-                    </div>
-                </div>
-            </section>
-
-        </main>
-    </div>
-
-    <!-- =========== Modals and Popups =========== -->
-    <div id="mood-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4 hidden">
-        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-8 w-full max-w-lg transform transition-all relative">
-            <button id="force-close-mood-modal-btn" class="absolute top-4 right-4 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white">
-                <i data-lucide="x" class="w-6 h-6"></i>
-            </button>
-            <div id="mood-form-content">
-                <h2 class="text-2xl font-bold text-center mb-2" data-translate-key="mood_title">Daily Mood Check-in</h2>
-                <p class="text-center text-slate-600 dark:text-slate-400 mb-6" data-translate-key="mood_subtitle">Rate the following from 0 to 10.</p>
-                <div class="space-y-5">
-                    <div>
-                        <label for="q1" class="font-medium" data-translate-key="mood_q1">How happy do you feel today?</label>
-                        <div class="flex items-center space-x-4"><span>0</span><input type="range" id="q1" min="0" max="10" value="5" class="w-full h-2 bg-slate-200 dark:bg-slate-600 rounded-lg appearance-none cursor-pointer accent-indigo-500"><span>10</span></div>
-                    </div>
-                    <div>
-                        <label for="q2" class="font-medium" data-translate-key="mood_q2">How energetic are you feeling?</label>
-                        <div class="flex items-center space-x-4"><span>0</span><input type="range" id="q2" min="0" max="10" value="5" class="w-full h-2 bg-slate-200 dark:bg-slate-600 rounded-lg appearance-none cursor-pointer accent-emerald-500"><span>10</span></div>
-                    </div>
-                    <div>
-                        <label for="q3" class="font-medium" data-translate-key="mood_q3">How calm and relaxed are you?</label>
-                        <div class="flex items-center space-x-4"><span>0</span><input type="range" id="q3" min="0" max="10" value="5" class="w-full h-2 bg-slate-200 dark:bg-slate-600 rounded-lg appearance-none cursor-pointer accent-amber-500"><span>10</span></div>
-                    </div>
-                    <div>
-                        <label for="q4" class="font-medium" data-translate-key="mood_q4">How well did you sleep last night?</label>
-                        <div class="flex items-center space-x-4"><span>0</span><input type="range" id="q4" min="0" max="10" value="5" class="w-full h-2 bg-slate-200 dark:bg-slate-600 rounded-lg appearance-none cursor-pointer accent-sky-500"><span>10</span></div>
-                    </div>
-                </div>
-                <button id="submit-mood-btn" class="mt-8 w-full py-3 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700 transition-colors" data-translate-key="mood_submit">Submit</button>
-            </div>
-            <div id="mood-result-content" class="hidden text-center">
-                <h3 class="text-2xl font-bold mb-4" data-translate-key="mood_result_title">Your Mood Analysis</h3>
-                <div class="bg-indigo-50 dark:bg-slate-700 p-4 rounded-lg">
-                    <p class="text-lg text-slate-700 dark:text-slate-200">Your average score is: <span id="mood-average-score" class="font-bold text-indigo-600 dark:text-indigo-400 text-xl"></span></p>
-                    <p class="text-xl mt-2">This indicates a <strong id="mood-classification" class="text-indigo-700 dark:text-indigo-300"></strong> mood.</p>
-                </div>
-                <div id="mood-suggestions" class="hidden mt-4 text-left">
-                    <h4 class="font-semibold mb-2" data-translate-key="mood_suggestion_title">Here are a few things that might help:</h4>
-                    <ul class="list-disc list-inside space-y-1 text-slate-600 dark:text-slate-400">
-                        <li data-translate-key="mood_suggestion_1">Listen to some calming music.</li>
-                        <li data-translate-key="mood_suggestion_2">Try a short 5-minute meditation.</li>
-                        <li data-translate-key="mood_suggestion_3">Step outside for some fresh air.</li>
-                        <li data-translate-key="mood_suggestion_4">Reach out to a friend or loved one.</li>
-                    </ul>
-                </div>
-                <button id="close-mood-modal-btn" class="mt-6 w-full py-3 bg-emerald-500 text-white font-bold rounded-lg hover:bg-emerald-600 transition-colors" data-translate-key="mood_close">Continue to Dashboard</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="info-popup" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4 hidden">
-        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-8 w-full max-w-3xl transform transition-all relative max-h-[90vh] overflow-y-auto border border-slate-200 dark:border-slate-700">
-            <button id="close-popup-btn" class="absolute top-4 right-4 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white">
-                <i data-lucide="x" class="w-6 h-6"></i>
-            </button>
-            <h2 id="popup-title" class="text-2xl font-bold mb-4">Popup Title</h2>
-            <div id="popup-content" class="text-slate-700 dark:text-slate-300 space-y-4"></div>
-        </div>
-    </div>
-
-    <!-- Floating AI Chatbot -->
-    <div id="floating-chatbot-btn" class="floating-chatbot-btn">
-        <i data-lucide="bot" class="w-8 h-8"></i>
-    </div>
-    <div id="chat-window" class="chat-window">
-        <iframe src="https://app.relevanceai.com/agents/f1db6c/6d4fa78e-4492-45c4-aaf1-a80bec2a75e5/9719069e-c179-49c5-8d9f-ae815f1755ee/embed-chat?hide_tool_steps=false&hide_file_uploads=false&hide_conversation_list=false&bubble_style=agent&primary_color=%23685FFF&bubble_icon=pd%2Fchat&input_placeholder_text=Type+your+message...&hide_logo=false&hide_description=false" class="w-full h-full border-0 rounded-b-lg"></iframe>
-    </div>
-
-    <section class="bg-indigo-50 py-16 px-6 md:px-20">
+            <section class="bg-indigo-50 py-16 px-6 md:px-20">
         <div class="max-w-6xl mx-auto">
         <!-- Heading -->
         <h2 class="text-4xl font-bold text-gray-800 text-center mb-10">Reminders & <span class="text-indigo-600">Alerts</span></h2>
@@ -435,43 +321,34 @@
     <!-- Heading -->
     <div class="text-center mb-10">
       <h2 class="text-3xl font-bold text-indigo-700">💆 Ayurvedic Therapies</h2>
-      <p class="text-gray-600 mt-2">Discover our holistic healing therapies designed for your mind, body, and soul</p>
+      <p class="text-gray-600 mt-2">Explore natural healing therapies for your well-being</p>
     </div>
 
     <!-- Therapy Cards Grid -->
-    <div class="grid md:grid-cols-3 gap-8">
-      
+    <div class="grid md:grid-cols-3 gap-6">
+
       <!-- Therapy 1 -->
-      <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition">
-        <img src="https://images.unsplash.com/photo-1556228724-4c2c4e5d4e3f" alt="Panchakarma" class="w-full h-48 object-cover">
-        <div class="p-5">
-          <h3 class="text-xl font-semibold text-indigo-600">Panchakarma Detox</h3>
-          <p class="text-gray-600 text-sm mt-2">A complete detoxification therapy to cleanse your body and restore balance.</p>
-          <p class="mt-3 text-sm text-gray-500">👨‍⚕️ Dr. Anjali Sharma</p>
-          <button class="mt-4 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">Book Now</button>
-        </div>
+      <div class="bg-white rounded-2xl shadow p-6 hover:shadow-lg transition">
+        <h3 class="text-xl font-semibold text-indigo-600">Panchakarma Detox</h3>
+        <p class="text-gray-600 text-sm mt-2">A deep detoxification process to cleanse toxins and restore inner balance.</p>
+        <p class="mt-3 text-sm text-gray-500">👨‍⚕️ Dr. Anjali Sharma</p>
+        <button class="mt-4 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">Book Now</button>
       </div>
 
       <!-- Therapy 2 -->
-      <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition">
-        <img src="https://images.unsplash.com/photo-1600566752870-8c57b1b35d3e" alt="Shirodhara" class="w-full h-48 object-cover">
-        <div class="p-5">
-          <h3 class="text-xl font-semibold text-indigo-600">Shirodhara</h3>
-          <p class="text-gray-600 text-sm mt-2">A stress-relieving therapy where warm oil is poured on the forehead.</p>
-          <p class="mt-3 text-sm text-gray-500">👨‍⚕️ Dr. Ramesh Iyer</p>
-          <button class="mt-4 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">Book Now</button>
-        </div>
+      <div class="bg-white rounded-2xl shadow p-6 hover:shadow-lg transition">
+        <h3 class="text-xl font-semibold text-indigo-600">Shirodhara</h3>
+        <p class="text-gray-600 text-sm mt-2">Warm oil therapy to reduce stress, improve sleep, and calm the mind.</p>
+        <p class="mt-3 text-sm text-gray-500">👨‍⚕️ Dr. Ramesh Iyer</p>
+        <button class="mt-4 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">Book Now</button>
       </div>
 
       <!-- Therapy 3 -->
-      <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition">
-        <img src="https://images.unsplash.com/photo-1587017532406-1e53c0d8a365" alt="Abhyanga" class="w-full h-48 object-cover">
-        <div class="p-5">
-          <h3 class="text-xl font-semibold text-indigo-600">Abhyanga Massage</h3>
-          <p class="text-gray-600 text-sm mt-2">A warm oil massage that improves circulation, rejuvenates muscles, and relieves stress.</p>
-          <p class="mt-3 text-sm text-gray-500">👩‍⚕️ Dr. Meera Nair</p>
-          <button class="mt-4 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">Book Now</button>
-        </div>
+      <div class="bg-white rounded-2xl shadow p-6 hover:shadow-lg transition">
+        <h3 class="text-xl font-semibold text-indigo-600">Abhyanga Massage</h3>
+        <p class="text-gray-600 text-sm mt-2">A rejuvenating warm oil massage to improve circulation and relieve fatigue.</p>
+        <p class="mt-3 text-sm text-gray-500">👩‍⚕️ Dr. Meera Nair</p>
+        <button class="mt-4 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">Book Now</button>
       </div>
 
     </div>
@@ -716,6 +593,122 @@
         </div>
     </footer>
 
+
+
+            <!-- Doctor Dashboard -->
+            <section id="doctor-dashboard" class="p-4 sm:p-6 lg:p-8 hidden">
+                <h2 class="center text-3xl font-bold mb-6" data-translate-key="doctor_dashboard_title">Doctor Dashboard</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="dashboard-card bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md cursor-pointer border border-slate-200 dark:border-slate-700" data-modal-target="doc-profile-info">
+                        <i data-lucide="user-md" class="w-10 h-10 text-indigo-500 mb-4"></i>
+                        <h3 class="text-lg font-semibold" data-translate-key="dd_card_profile">Doctor Profile</h3>
+                    </div>
+                    <div class="dashboard-card bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md cursor-pointer border border-slate-200 dark:border-slate-700" data-modal-target="patient-management-info">
+                        <i data-lucide="users" class="w-10 h-10 text-emerald-500 mb-4"></i>
+                        <h3 class="text-lg font-semibold" data-translate-key="dd_card_patients">Patient Management</h3>
+                    </div>
+                    <div class="dashboard-card bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md cursor-pointer border border-slate-200 dark:border-slate-700" data-modal-target="records-info">
+                        <i data-lucide="clipboard-list" class="w-10 h-10 text-amber-500 mb-4"></i>
+                        <h3 class="text-lg font-semibold" data-translate-key="dd_card_records">Health Records (EHR/EMR)</h3>
+                    </div>
+                    <div class="dashboard-card bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md cursor-pointer border border-slate-200 dark:border-slate-700" data-modal-target="doc-appointments-info">
+                        <i data-lucide="calendar-plus" class="w-10 h-10 text-sky-500 mb-4"></i>
+                        <h3 class="text-lg font-semibold" data-translate-key="dd_card_appointments">Appointments</h3>
+                    </div>
+                    <div class="dashboard-card bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md cursor-pointer border border-slate-200 dark:border-slate-700" data-modal-target="prescriptions-info">
+                        <i data-lucide="file-text" class="w-10 h-10 text-lime-500 mb-4"></i>
+                        <h3 class="text-lg font-semibold" data-translate-key="dd_card_prescriptions">Prescriptions</h3>
+                    </div>
+                    <div class="dashboard-card bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md cursor-pointer border border-slate-200 dark:border-slate-700" data-modal-target="analytics-info">
+                        <i data-lucide="bar-chart-3" class="w-10 h-10 text-rose-500 mb-4"></i>
+                        <h3 class="text-lg font-semibold" data-translate-key="dd_card_analytics">Analytics & Reporting</h3>
+                    </div>
+                    <div class="dashboard-card bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md cursor-pointer border border-slate-200 dark:border-slate-700" data-modal-target="guidance-info">
+                        <i data-lucide="heart-handshake" class="w-10 h-10 text-green-600 mb-4"></i>
+                        <h3 class="text-lg font-semibold" data-translate-key="dd_card_guidance">Yoga Practices</h3>
+                    </div>
+                    <div class="dashboard-card bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md cursor-pointer border border-slate-200 dark:border-slate-700" data-modal-target="doc-notifications-info">
+                        <i data-lucide="bell" class="w-10 h-10 text-fuchsia-500 mb-4"></i>
+                        <h3 class="text-lg font-semibold" data-translate-key="dd_card_notifications">Notifications</h3>
+                    </div>
+                    <div class="dashboard-card bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md cursor-pointer border border-slate-200 dark:border-slate-700" data-modal-target="doc-utilities-info">
+                        <i data-lucide="settings-2" class="w-10 h-10 text-slate-500 mb-4"></i>
+                        <h3 class="text-lg font-semibold" data-translate-key="dd_card_utilities">Extra Utilities</h3>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- =========== Modals and Popups =========== -->
+    <div id="mood-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4 hidden">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-8 w-full max-w-lg transform transition-all relative">
+            <button id="force-close-mood-modal-btn" class="absolute top-4 right-4 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <div id="mood-form-content">
+                <h2 class="text-2xl font-bold text-center mb-2" data-translate-key="mood_title">Daily Mood Check-in</h2>
+                <p class="text-center text-slate-600 dark:text-slate-400 mb-6" data-translate-key="mood_subtitle">Rate the following from 0 to 10.</p>
+                <div class="space-y-5">
+                    <div>
+                        <label for="q1" class="font-medium" data-translate-key="mood_q1">How happy do you feel today?</label>
+                        <div class="flex items-center space-x-4"><span>0</span><input type="range" id="q1" min="0" max="10" value="5" class="w-full h-2 bg-slate-200 dark:bg-slate-600 rounded-lg appearance-none cursor-pointer accent-indigo-500"><span>10</span></div>
+                    </div>
+                    <div>
+                        <label for="q2" class="font-medium" data-translate-key="mood_q2">How energetic are you feeling?</label>
+                        <div class="flex items-center space-x-4"><span>0</span><input type="range" id="q2" min="0" max="10" value="5" class="w-full h-2 bg-slate-200 dark:bg-slate-600 rounded-lg appearance-none cursor-pointer accent-emerald-500"><span>10</span></div>
+                    </div>
+                    <div>
+                        <label for="q3" class="font-medium" data-translate-key="mood_q3">How calm and relaxed are you?</label>
+                        <div class="flex items-center space-x-4"><span>0</span><input type="range" id="q3" min="0" max="10" value="5" class="w-full h-2 bg-slate-200 dark:bg-slate-600 rounded-lg appearance-none cursor-pointer accent-amber-500"><span>10</span></div>
+                    </div>
+                    <div>
+                        <label for="q4" class="font-medium" data-translate-key="mood_q4">How well did you sleep last night?</label>
+                        <div class="flex items-center space-x-4"><span>0</span><input type="range" id="q4" min="0" max="10" value="5" class="w-full h-2 bg-slate-200 dark:bg-slate-600 rounded-lg appearance-none cursor-pointer accent-sky-500"><span>10</span></div>
+                    </div>
+                </div>
+                <button id="submit-mood-btn" class="mt-8 w-full py-3 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700 transition-colors" data-translate-key="mood_submit">Submit</button>
+            </div>
+            <div id="mood-result-content" class="hidden text-center">
+                <h3 class="text-2xl font-bold mb-4" data-translate-key="mood_result_title">Your Mood Analysis</h3>
+                <div class="bg-indigo-50 dark:bg-slate-700 p-4 rounded-lg">
+                    <p class="text-lg text-slate-700 dark:text-slate-200">Your average score is: <span id="mood-average-score" class="font-bold text-indigo-600 dark:text-indigo-400 text-xl"></span></p>
+                    <p class="text-xl mt-2">This indicates a <strong id="mood-classification" class="text-indigo-700 dark:text-indigo-300"></strong> mood.</p>
+                </div>
+                <div id="mood-suggestions" class="hidden mt-4 text-left">
+                    <h4 class="font-semibold mb-2" data-translate-key="mood_suggestion_title">Here are a few things that might help:</h4>
+                    <ul class="list-disc list-inside space-y-1 text-slate-600 dark:text-slate-400">
+                        <li data-translate-key="mood_suggestion_1">Listen to some calming music.</li>
+                        <li data-translate-key="mood_suggestion_2">Try a short 5-minute meditation.</li>
+                        <li data-translate-key="mood_suggestion_3">Step outside for some fresh air.</li>
+                        <li data-translate-key="mood_suggestion_4">Reach out to a friend or loved one.</li>
+                    </ul>
+                </div>
+                <button id="close-mood-modal-btn" class="mt-6 w-full py-3 bg-emerald-500 text-white font-bold rounded-lg hover:bg-emerald-600 transition-colors" data-translate-key="mood_close">Continue to Dashboard</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="info-popup" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4 hidden">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-8 w-full max-w-3xl transform transition-all relative max-h-[90vh] overflow-y-auto border border-slate-200 dark:border-slate-700">
+            <button id="close-popup-btn" class="absolute top-4 right-4 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <h2 id="popup-title" class="text-2xl font-bold mb-4">Popup Title</h2>
+            <div id="popup-content" class="text-slate-700 dark:text-slate-300 space-y-4"></div>
+        </div>
+    </div>
+
+    <!-- Floating AI Chatbot -->
+    <div id="floating-chatbot-btn" class="floating-chatbot-btn">
+        <i data-lucide="bot" class="w-8 h-8"></i>
+    </div>
+    <div id="chat-window" class="chat-window">
+        <iframe src="https://app.relevanceai.com/agents/f1db6c/6d4fa78e-4492-45c4-aaf1-a80bec2a75e5/9719069e-c179-49c5-8d9f-ae815f1755ee/embed-chat?hide_tool_steps=false&hide_file_uploads=false&hide_conversation_list=false&bubble_style=agent&primary_color=%23685FFF&bubble_icon=pd%2Fchat&input_placeholder_text=Type+your+message...&hide_logo=false&hide_description=false" class="w-full h-full border-0 rounded-b-lg"></iframe>
+    </div>
+
+    
 
 
     <script>
