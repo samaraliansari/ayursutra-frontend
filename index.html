@@ -223,9 +223,9 @@
             </nav>
 
             <!-- Patient Dashboard -->
-            <section id="patient-dashboard" class="p-4 sm:p-6 lg:p-8 hidden">
+            <section id="patient-dashboard" class="p-4 sm:p-6 lg:p-8 hidden flex center">
                 <h2 class="text-3xl font-bold mb-6" data-translate-key="patient_dashboard_title">Patient Dashboard</h2>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
                     <div class="dashboard-card bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md cursor-pointer border border-slate-200 dark:border-slate-700" data-modal-target="profile-info">
                         <i data-lucide="user-circle-2" class="w-10 h-10 text-indigo-500 mb-4"></i>
                         <h3 class="text-lg font-semibold" data-translate-key="pd_card_profile">Patient Profile & Health Info</h3>
@@ -256,6 +256,29 @@
                     </div>
                 </div>
             </section>
+
+            
+            <section class="bg-white py-16 px-6 md:px-20">
+                <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+                    <!-- Text -->
+                     <div>
+                        <h2 class="text-4xl font-bold text-gray-800 mb-6">About <span class="text-indigo-600">AyurSutra</span></h2>
+                        <p class="text-gray-600 leading-relaxed mb-4">
+                            AyurSutra combines the ancient wisdom of Ayurveda with the power of modern technology. 
+                            Our platform helps patients and doctors manage Panchakarma therapies efficiently, ensuring a holistic healing journey that’s personalized and effective.</p>
+                            <p class="text-gray-600 leading-relaxed">
+                                With features like smart scheduling, AI-driven therapy insights, and patient progress tracking, 
+                                AyurSutra is designed to bring Ayurveda to the digital age without losing its soul
+                            </p>
+                        </div>
+
+                <!-- Image -->
+                        <div class="flex justify-center">
+                            <img src="https://cdn-icons-png.flaticon.com/512/2966/2966483.png" alt="Ayurveda Illustration" class="w-80 rounded-xl shadow-lg">
+                        </div>
+                    </div>
+            </section>
+
 
             <!-- Doctor Dashboard -->
             <section id="doctor-dashboard" class="p-4 sm:p-6 lg:p-8 hidden">
@@ -369,6 +392,31 @@
     <div id="chat-window" class="chat-window">
         <iframe src="https://app.relevanceai.com/agents/f1db6c/6d4fa78e-4492-45c4-aaf1-a80bec2a75e5/9719069e-c179-49c5-8d9f-ae815f1755ee/embed-chat?hide_tool_steps=false&hide_file_uploads=false&hide_conversation_list=false&bubble_style=agent&primary_color=%23685FFF&bubble_icon=pd%2Fchat&input_placeholder_text=Type+your+message...&hide_logo=false&hide_description=false" class="w-full h-full border-0 rounded-b-lg"></iframe>
     </div>
+
+    <footer class="bg-gray-900 text-gray-300 py-10 px-6 md:px-20 flex flex-row md:justify-between space-y-8 md:space-y-0">
+        <div class="max-w-6xl mx-auto grid md:grid-cols-3 gap-8">
+            <!-- Logo & Description -->
+            <div>
+                <h3 class="text-2xl font-bold text-white mb-4">AyurSutra</h3>
+                <p class="text-gray-400">
+                    Bridging the gap between Ayurveda and technology.
+                    Your companion for holistic wellness.
+                </p>
+            </div>
+        </div>
+
+    <!-- Quick Links -->
+        <div>
+            <h4 class="text-lg font-semibold text-white mb-4">Quick Links</h4>
+            <ul class="space-y-2">
+                <li><a href="/" class="hover:text-indigo-400">Home</a></li>
+                <li><a href="/about" class="hover:text-indigo-400">About</a></li>
+                <li><a href="/services" class="hover:text-indigo-400">Services</a></li>
+                <li><a href="/contact" class="hover:text-indigo-400">Contact</a></li>
+            </ul>
+        </div>
+    </footer>
+
 
 
     <script>
