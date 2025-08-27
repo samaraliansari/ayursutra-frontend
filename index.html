@@ -287,7 +287,7 @@
                     </div>
                     <div class="dashboard-card bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md cursor-pointer border border-slate-200 dark:border-slate-700" data-modal-target="guidance-info">
                         <i data-lucide="heart-handshake" class="w-10 h-10 text-green-600 mb-4"></i>
-                        <h3 class="text-lg font-semibold" data-translate-key="dd_card_guidance">Lifestyle Guidance</h3>
+                        <h3 class="text-lg font-semibold" data-translate-key="dd_card_guidance">Yoga Practices</h3>
                     </div>
                     <div class="dashboard-card bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md cursor-pointer border border-slate-200 dark:border-slate-700" data-modal-target="doc-notifications-info">
                         <i data-lucide="bell" class="w-10 h-10 text-fuchsia-500 mb-4"></i>
@@ -837,12 +837,24 @@
             chatWindow.classList.toggle('open');
         });
 
-        messageForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            messageStatus.innerText = "Connecting you to a doctor...";
-            setTimeout(() => { messageStatus.innerText = "A doctor will be in touch shortly."; }, 2000);
-            setTimeout(() => { messageStatus.innerText = ""; messageForm.reset(); }, 5000);
-        });
+        if (email === 'patient@demo.com'){
+            messageForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                messageStatus.textContent = '';
+                const message = e.target.message.value.trim();
+                if (message.length < 10) {
+                    messageStatus.textContent = 'Please enter a more detailed message (at least 10 characters).';
+                    return;
+                }
+                messageStatus.textContent = 'Sending...';
+                setTimeout(() => {
+                    messageStatus.textContent = 'Your message has been sent to the doctor. They will get back to you shortly.';
+                    e.target.reset();
+                }, 2000);
+            });
+        } 
+
+        
     </script>
 </body>
 </html>
